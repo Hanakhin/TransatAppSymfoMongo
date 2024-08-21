@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - BeachRelax{% endblock %}
+
+{% block body %}
+    <div class="bg-gray-100 flex flex-col justify-center">
+        <div class="container mx-auto px-4 py-12 flex flex-col gap-2.5">
+            <h1 class="text-4xl font-extrabold text-center text-gray-800 mb-6">Bienvenue sur BeachRelax</h1>
+            <p class="text-lg text-center text-gray-600 mb-8">
+                Profitez de moments inoubliables sur nos plages. Réservez votre transat en quelques clics et détendez-vous au soleil.
+            </p>
+
+            <div class="flex flex-col md:flex-row justify-around items-start gap-4">
+                <div class="bg-white shadow-md rounded-lg p-6 mb-6 md:mb-0 md:w-1/3">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-calendar-alt fa-2x text-blue-600 mr-3"></i>
+                        <h2 class="text-2xl font-semibold text-gray-800">Réservation Facile</h2>
+                    </div>
+                    <p class="text-gray-600">
+                        Choisissez la date, l'heure et le nombre de transats que vous souhaitez réserver.
+                        Notre interface simple et intuitive vous guide à chaque étape.
+                    </p>
+                </div>
+
+                <div class="bg-white shadow-md rounded-lg p-6 mb-6 md:mb-0 md:w-1/3">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-chair fa-2x text-green-600 mr-3"></i>
+                        <h2 class="text-2xl font-semibold text-gray-800">Confort et Détente</h2>
+                    </div>
+                    <p class="text-gray-600">
+                        Nos transats sont confortables et bien entretenus. Profitez d'un cadre agréable pour vous relaxer et profiter du soleil.
+                    </p>
+                </div>
+
+                <div class="bg-white shadow-md rounded-lg p-6 mb-6 md:mb-0 md:w-1/3">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-headset fa-2x text-red-600 mr-3"></i>
+                        <h2 class="text-2xl font-semibold text-gray-800">Service Client</h2>
+                    </div>
+                    <p class="text-gray-600">
+                        Notre équipe est à votre disposition pour répondre à toutes vos questions.
+                        N'hésitez pas à nous contacter pour toute demande d'information.
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center">
+                {% if app.user %}
+                <a href="{{ path('app_reservation') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                    Réserver un transat
+                </a>
+                {% else %}
+                    <p>Vous devez vous <a href="{{ path('app_login') }}" class="text-blue-600">Connecter</a> pour demander une reservation</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

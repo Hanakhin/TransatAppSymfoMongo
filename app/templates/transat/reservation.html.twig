@@ -1,0 +1,154 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réservation de Transats - BeachRelax{% endblock %}
+
+{% block body %}
+    <div class=" py-12">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">Réservez votre transat</h1>
+        <div class="container mx-auto px- flex flex-row items-center justify-center gap-5">
+
+            <div class="bg-white shadow-md rounded-lg p-6 max-w-2xl mx-auto">
+
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="flash-{{ label }} bg-{{ label == 'success' ? 'green' : 'red' }}-100 border border-{{ label == 'success' ? 'green' : 'red' }}-400 text-{{ label == 'success' ? 'green' : 'red' }}-700 px-4 py-3 rounded relative" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+
+                {{ form_start(form, {'attr': {'class': 'space-y-6', 'id': 'reservation-form'}}) }}
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        {{ form_label(form.date, 'Date de réservation', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                        {{ form_widget(form.date, {'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50'}}) }}
+                    </div>
+
+                    <div>
+                        {{ form_label(form.emplacement, 'Emplacement', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                        {{ form_widget(form.emplacement, {'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50'}}) }}
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        {{ form_label(form.heureDebut, 'Heure de début', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                        {{ form_widget(form.heureDebut, {'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50'}}) }}
+                    </div>
+
+                    <div>
+                        {{ form_label(form.horaires, 'Durée de réservation', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                        {{ form_widget(form.horaires, {'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50'}}) }}
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-4 rounded-md">
+                    {{ form_label(form.nbTransat, 'Nombre de transats', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                    {{ form_widget(form.nbTransat, {'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50'}}) }}
+                </div>
+
+                <div class="bg-gray-50 p-4 rounded-md">
+                    {{ form_label(form.prix, 'Prix total', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                    {{ form_widget(form.prix, {'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50', 'readonly': 'readonly'}}) }}
+                </div>
+
+                <div>
+                    {% if app.user %}
+                        <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Réserver maintenant
+                        </button>
+                    {% else %}
+                        <p>Vous devez vous <a href="{{ path('app_login') }}" class="text-blue-600">Connecter</a> pour demander une reservation</p>
+                    {% endif %}
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+
+            <div class="bg-white shadow-md rounded-lg p-6 max-w-4xl mx-auto mt-5 max-h-50 overflow-scroll">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Réservations existantes</h2>
+                {% if reservations is defined and reservations is not empty %}
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white ">
+                            <thead class="bg-gray-100">
+                            <tr>
+                                <th class="py-2 px-4 border-b text-left">Date</th>
+                                <th class="py-2 px-4 border-b text-left">Heure de début</th>
+                                <th class="py-2 px-4 border-b text-left">Durée</th>
+                                <th class="py-2 px-4 border-b text-left">Emplacement</th>
+                                <th class="py-2 px-4 border-b text-left">Nombre de transats</th>
+                                <th class="py-2 px-4 border-b text-left">Prix</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for reservation in reservations %}
+                                <tr>
+                                    <td class="py-2 px-4 border-b">{{ reservation.date|date('d/m/Y') }}</td>
+                                    <td class="py-2 px-4 border-b">{{ reservation.heureDebut }}</td>
+                                    <td class="py-2 px-4 border-b">{{ reservation.horaires }} heure(s)</td>
+                                    <td class="py-2 px-4 border-b">{{ reservation.emplacement }}</td>
+                                    <td class="py-2 px-4 border-b">{{ reservation.nbTransat }}</td>
+                                    <td class="py-2 px-4 border-b">{{ reservation.prix }} €</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-gray-600">Aucune réservation n'a été effectuée pour le moment.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('reservation-form');
+            const heureDebutSelect = document.getElementById('{{ form.heureDebut.vars.id }}');
+            const dureeSelect = document.getElementById('{{ form.horaires.vars.id }}');
+            const prixInput = document.getElementById('{{ form.prix.vars.id }}');
+            const nbTransatInput = document.getElementById('{{ form.nbTransat.vars.id }}');
+            const prixParHeure = 5; // Prix par heure par transat
+
+            function updatePrix() {
+                const duree = parseInt(dureeSelect.value);
+                const nbTransat = parseInt(nbTransatInput.value);
+                const prix = duree * prixParHeure * nbTransat;
+                prixInput.value = prix.toFixed(2);
+            }
+
+            function validateReservation() {
+                const heureDebut = parseInt(heureDebutSelect.value.split(':')[0]);
+                const duree = parseInt(dureeSelect.value);
+                const heureFin = heureDebut + duree;
+
+                if (heureFin > 18) {
+                    alert('La réservation ne peut pas dépasser 18h00. Veuillez ajuster l\'heure de début ou la durée.');
+                    return false;
+                }
+                return true;
+            }
+
+            heureDebutSelect.addEventListener('change', updatePrix);
+            dureeSelect.addEventListener('change', updatePrix);
+            nbTransatInput.addEventListener('change', updatePrix);
+
+            // Calcul initial du prix
+            updatePrix();
+
+            // Validation du formulaire
+            form.addEventListener('submit', function(event) {
+                if (!validateReservation()) {
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
+{% endblock %}

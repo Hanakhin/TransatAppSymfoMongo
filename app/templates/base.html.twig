@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMv7c1nY8v5d9n5p5m5p5m5p5m5p5m5p5m5p5" crossorigin="anonymous">
+    <title>{% block title %}BeachRelax - Réservation de Transats{% endblock %}</title>
+
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen bg-blue-50 text-gray-800">
+<header class="bg-white shadow-md">
+    <nav class="container mx-auto px-4 py-3">
+        <div class="flex justify-between items-center">
+            <a href="{{ path('app_home') }}" class="text-2xl font-bold text-blue-600">
+                🏖️ BeachRelax
+            </a>
+            <div class="space-x-4">
+                <a href="{{ path('app_home') }}" class="text-gray-600 hover:text-blue-600">Accueil</a>
+                <a href="{{ path('app_reservation') }}" class="text-gray-600 hover:text-blue-600">Réserver</a>
+                <a href="{{ path('app_pricing') }}" class="text-gray-600 hover:text-blue-600">Tarifs</a>
+                <a href="{{ path('app_contact') }}" class="text-gray-600 hover:text-blue-600">Contact</a>
+            </div>
+            <div>
+                {% if app.user %}
+                    <span class="text-gray-600">Bienvenue <span class="text-blue-600 ">{{ app.user.userIdentifier }}</span></span>
+                    <a href="{{ path('app_logout') }}" class="ml-4 text-red-600 hover:text-red-800">Déconnexion</a>
+                {% else %}
+                    <a href="{{ path('app_login') }}" class="text-blue-600 hover:text-blue-800">Connexion</a>
+                    <a href="{{ path('app_register') }}" class="ml-4 text-green-600 hover:text-green-800">Inscription</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div id="flash-messages">
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="flash-{{ label }} bg-{{ label == 'success' ? 'green' : 'red' }}-100 border border-{{ label == 'success' ? 'green' : 'red' }}-400 text-{{ label == 'success' ? 'green' : 'red' }}-700 px-4 py-3 rounded relative" role="alert">
+                {% if label == 'success' %}
+                    <i class="fas fa-check-circle mr-2"></i>
+                {% else %}
+                    <i class="fas fa-exclamation-circle mr-2"></i>
+                {% endif %}
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+</div>
+
+<main class="flex-grow container mx-auto px-4 py-8 justify-center items-center flex h-80">
+    {% block body %}{% endblock %}
+</main>
+
+<footer class="bg-gray-100 border-t">
+    <div class="container mx-auto px-4 py-4 text-center text-gray-600">
+        <p>&copy; {{ "now"|date("Y") }} BeachRelax. Tous droits réservés.</p>
+    </div>
+</footer>
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var flashMessages = document.getElementById('flash-messages');
+            if (flashMessages && flashMessages.children.length > 0) {
+                setTimeout(function() {
+                    flashMessages.style.transition = 'opacity 0.5s ease-out';
+                    flashMessages.style.opacity = '0';
+                    setTimeout(function() {
+                        flashMessages.remove();
+                    }, 1000);
+                }, 2000);
+            }
+        });
+    </script>
+{% endblock %}
+</body>
+</html>
