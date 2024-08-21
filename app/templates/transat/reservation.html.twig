@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
 
+
 {% block title %}Réservation de Transats - BeachRelax{% endblock %}
 
 {% block body %}
@@ -65,7 +66,7 @@
 
                 {{ form_end(form) }}
             </div>
-
+            {% if is_granted('ROLE_ADMIN') %}
             <div class="bg-white shadow-md rounded-lg p-6 max-w-4xl mx-auto mt-5 max-h-50 overflow-scroll">
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Réservations existantes</h2>
                 {% if reservations is defined and reservations is not empty %}
@@ -97,6 +98,7 @@
                     </div>
                 {% else %}
                     <p class="text-gray-600">Aucune réservation n'a été effectuée pour le moment.</p>
+                {% endif %}
                 {% endif %}
             </div>
         </div>

@@ -32,7 +32,7 @@
             </div>
             <div>
                 {% if app.user %}
-                    <span class="text-gray-600">Bienvenue <span class="text-blue-600 ">{{ app.user.userIdentifier }}</span></span>
+                    <span class="text-gray-600">Bienvenue <span class="text-blue-600 ">{{ app.user.firstName }}</span></span>
                     <a href="{{ path('app_logout') }}" class="ml-4 text-red-600 hover:text-red-800">Déconnexion</a>
                 {% else %}
                     <a href="{{ path('app_login') }}" class="text-blue-600 hover:text-blue-800">Connexion</a>
